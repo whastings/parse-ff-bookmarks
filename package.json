@@ -1,0 +1,9 @@
+{
+  "name": "ParseBookmarks",
+  "description": "Parses Firefox bookmarks from a json backup file.",
+  "author": "Will Hastings <will@kalamuna.com>",
+  "version": "0.1.1",
+  "dependencies": {
+    "async": "0.2.x"
+  }
+}
