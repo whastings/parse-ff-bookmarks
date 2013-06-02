@@ -6,13 +6,34 @@
 // Dependencies:
 var fs = require('fs'),
     path = require('path'),
-    Q = require('q');
+    Q = require('q'),
+    Handlebars = require('handlebars');
+
+// "Constants":
+var FOLDER_TEMPLATE_FILE = __dirname + '/templates/folder.handlebars',
+    BOOKMARK_TEMPLATE_FILE = __dirname + '/templates/bookmark.handlebars',
+    LAYOUT_TEMPLATE_FILE = __dirname + '/templates/layout.handlebars';
 
 // Data variables:
 var bookmarksJsonFile = process.argv[2],
     outputFile = process.argv[3],
     startFolder = process.argv[4],
-    bookmarks = null;
+    bookmarks,
+    outputStream,
+    folderTemplate,
+    bookmarkTemplate,
+    layoutTemplate;
+
+// Handlebars helper for rendering folder children.
+Handlebars.registerHelper('renderChild', function(child) {
+  if (child.type == 'text/x-moz-place') {
+    return new Handlebars.SafeString('<li>' + bookmarkTemplate(child) + '</li>');
+  }
+  if (child.type == 'text/x-moz-place-container') {
+    return new Handlebars.SafeString('<li>' + folderTemplate(child) + '</li>');
+  }
+  return '';
+});
 
 // If bookmarks JSON file is a relative path, resolve it to an absolute one.
 if (bookmarksJsonFile.charAt(0) != '/') {
@@ -33,9 +54,24 @@ if (bookmarksJsonFile.charAt(0) != '/') {
 })
 .then(function(data) {
   bookmarks = JSON.parse(data);
-  console.log('Done!');
+  // Read in folder and bookmark templates.
+  return [
+    Q.nfcall(fs.readFile, FOLDER_TEMPLATE_FILE),
+    Q.nfcall(fs.readFile, BOOKMARK_TEMPLATE_FILE),
+    Q.nfcall(fs.readFile, LAYOUT_TEMPLATE_FILE)
+  ];
 }, function(error) {
   throw new Error('Unable to read Bookmarks JSON file. Please check its permissions.');
+})
+.spread(function(folderTemplateContents, bookmarkTemplateContents, layoutTemplateContents) {
+  // Compile templates.
+  folderTemplate = Handlebars.compile(folderTemplateContents.toString());
+  bookmarkTemplate = Handlebars.compile(bookmarkTemplateContents.toString());
+  layoutTemplate = Handlebars.compile(layoutTemplateContents.toString());
+  Handlebars.registerPartial('folder', folderTemplate);
+  // Recursively render bookmarks.
+  var renderedBookmarks = layoutTemplate({content: bookmarks});
+  return Q.nfcall(fs.writeFile, outputFile, renderedBookmarks);
 })
 // On failure, print the error message.
 .fail(function(error) {
