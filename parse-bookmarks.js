@@ -54,6 +54,13 @@ if (bookmarksJsonFile.charAt(0) != '/') {
 })
 .then(function(data) {
   bookmarks = JSON.parse(data);
+  // If user specified a start folder, reduce bookmarks to contents of that folder.
+  if (startFolder) {
+    bookmarks = getFolder(startFolder, bookmarks);
+    if (!bookmarks) {
+      throw new Error('The specified start folder was not found.');
+    }
+  }
   // Read in folder and bookmark templates.
   return [
     Q.nfcall(fs.readFile, FOLDER_TEMPLATE_FILE),
@@ -77,3 +84,35 @@ if (bookmarksJsonFile.charAt(0) != '/') {
 .fail(function(error) {
   console.log('Error: ' + error.message);
 });
+
+/**
+ * Recursively searches for a folder.
+ *
+ * @param string|array folder
+ *   An array, or string with the structure "parent-folder/child-folder",
+ *   representing the path to the desired folder.
+ * @param object contents
+ *   The object with children to search through.
+ *
+ * @return object|bool
+ *   Folder object if it was found, or false if not.
+ */
+function getFolder(folder, contents) {
+  if (typeof folder === 'string') {
+    folder = folder.split('/');
+  }
+  var currentFolder = folder[0];
+  var foundFolder = false;
+  var children = contents.children;
+  folder = folder.slice(1);
+  for (var i = 0, length = children.length; i < length; i++) {
+    if (children[i].type == 'text/x-moz-place-container' && children[i].title == currentFolder) {
+      foundFolder = children[i];
+      break;
+    }
+  }
+  if (folder.length > 0 && foundFolder) {
+    return getFolder(folder, foundFolder);
+  }
+  return foundFolder;
+}
