@@ -12,7 +12,9 @@ var fs = require('fs'),
 // "Constants":
 var FOLDER_TEMPLATE_FILE = __dirname + '/templates/folder.handlebars',
     BOOKMARK_TEMPLATE_FILE = __dirname + '/templates/bookmark.handlebars',
-    LAYOUT_TEMPLATE_FILE = __dirname + '/templates/layout.handlebars';
+    LAYOUT_TEMPLATE_FILE = __dirname + '/templates/layout.handlebars',
+    CSS_FILE = __dirname + '/styles.css',
+    JS_FILE = __dirname + '/collapse.js';
 
 // Data variables:
 var bookmarksJsonFile = process.argv[2],
@@ -61,23 +63,25 @@ if (bookmarksJsonFile.charAt(0) != '/') {
       throw new Error('The specified start folder was not found.');
     }
   }
-  // Read in folder and bookmark templates.
+  // Read in folder and bookmark templates, as well as CSS and JS.
   return [
     Q.nfcall(fs.readFile, FOLDER_TEMPLATE_FILE),
     Q.nfcall(fs.readFile, BOOKMARK_TEMPLATE_FILE),
-    Q.nfcall(fs.readFile, LAYOUT_TEMPLATE_FILE)
+    Q.nfcall(fs.readFile, LAYOUT_TEMPLATE_FILE),
+    Q.nfcall(fs.readFile, CSS_FILE),
+    Q.nfcall(fs.readFile, JS_FILE)
   ];
 }, function(error) {
   throw new Error('Unable to read Bookmarks JSON file. Please check its permissions.');
 })
-.spread(function(folderTemplateContents, bookmarkTemplateContents, layoutTemplateContents) {
+.spread(function(folderTemplateContents, bookmarkTemplateContents, layoutTemplateContents, css, js) {
   // Compile templates.
   folderTemplate = Handlebars.compile(folderTemplateContents.toString());
   bookmarkTemplate = Handlebars.compile(bookmarkTemplateContents.toString());
   layoutTemplate = Handlebars.compile(layoutTemplateContents.toString());
   Handlebars.registerPartial('folder', folderTemplate);
   // Recursively render bookmarks.
-  var renderedBookmarks = layoutTemplate({content: bookmarks});
+  var renderedBookmarks = layoutTemplate({content: bookmarks, css: css, js: js});
   return Q.nfcall(fs.writeFile, outputFile, renderedBookmarks);
 })
 // On failure, print the error message.

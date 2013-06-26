@@ -1,0 +1,6 @@
+.folder ul {
+  display: none;
+}
+body > .folder > ul {
+  display: block;
+}
