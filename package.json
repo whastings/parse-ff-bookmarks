@@ -3,6 +3,7 @@
   "description": "Parses Firefox bookmarks from a json backup file.",
   "author": "Will Hastings <will@kalamuna.com>",
   "version": "0.1.1",
+  "main": "parse-bookmarks",
   "dependencies": {
     "q": "0.9.x",
     "handlebars": "1.0.x"

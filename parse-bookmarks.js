@@ -37,6 +37,12 @@ Handlebars.registerHelper('renderChild', function(child) {
   return '';
 });
 
+// Check that required CLI arguments are present.
+// If they aren't, or there are extra, display usage and exit.
+if (!bookmarksJsonFile || !outputFile || (process.argv.length > 5)) {
+  console.log('Usage: node parse-bookmarks BOOKMARKS_JSON_FILE OUTPUT_FILE [START_FOLDER]');
+  process.exit(1);
+}
 // If bookmarks JSON file is a relative path, resolve it to an absolute one.
 if (bookmarksJsonFile.charAt(0) != '/') {
   bookmarksJsonFile = path.resolve(__dirname, bookmarksJsonFile);
@@ -86,7 +92,7 @@ if (bookmarksJsonFile.charAt(0) != '/') {
 })
 // On failure, print the error message.
 .fail(function(error) {
-  console.log('Error: ' + error.message);
+  console.error('Error: ' + error.message);
 });
 
 /**
