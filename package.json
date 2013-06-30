@@ -1,5 +1,5 @@
 {
-  "name": "Parse Firefox Bookmarks",
+  "name": "parse-ff-bookmarks",
   "description": "A Node.js CLI script for turning a Firefox bookmarks json file into a nicely-formatted, shareable HTML file.",
   "author": "Will Hastings <will@kalamuna.com>",
   "version": "1.0.0",
