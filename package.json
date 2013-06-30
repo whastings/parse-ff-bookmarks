@@ -13,5 +13,8 @@
     "q": "0.9.x",
     "handlebars": "1.0.x"
   },
-  "preferGlobal": true
+  "preferGlobal": true,
+  "bin": {
+    "parse-ff-bookmarks": "./parse-ff-bookmarks.js"
+  }
 }
