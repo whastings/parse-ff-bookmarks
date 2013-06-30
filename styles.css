@@ -1,17 +1,12 @@
 body {
-  margin: 0 auto;
+  margin: 25px auto;
   width: 98%;
   max-width: 960px;
 }
 
 .folder ul {
-  display: none;
   margin-bottom: 15px;
   list-style: none;
-}
-
-body > .folder > ul {
-  display: block;
 }
 
 .bookmark {
