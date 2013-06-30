@@ -1,11 +1,17 @@
 {
-  "name": "ParseBookmarks",
-  "description": "Parses Firefox bookmarks from a json backup file.",
+  "name": "Parse Firefox Bookmarks",
+  "description": "A Node.js CLI script for turning a Firefox bookmarks json file into a nicely-formatted, shareable HTML file.",
   "author": "Will Hastings <will@kalamuna.com>",
-  "version": "0.1.1",
+  "version": "1.0.0",
+  "homepage": "https://github.com/whastings/parse-ff-bookmarks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whastings/parse-ff-bookmarks.git"
+  },
   "main": "parse-bookmarks",
   "dependencies": {
     "q": "0.9.x",
     "handlebars": "1.0.x"
-  }
+  },
+  "preferGlobal": true
 }
