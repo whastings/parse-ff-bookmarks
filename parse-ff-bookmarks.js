@@ -42,7 +42,7 @@ Handlebars.registerHelper('renderChild', function(child) {
 // Check that required CLI arguments are present.
 // If they aren't, or there are extra, display usage and exit.
 if (!bookmarksJsonFile || !outputFile || (process.argv.length > 5)) {
-  console.log('Usage: node parse-bookmarks BOOKMARKS_JSON_FILE OUTPUT_FILE [START_FOLDER]');
+  console.log('Usage: parse-ff-bookmarks BOOKMARKS_JSON_FILE OUTPUT_FILE [START_FOLDER]');
   process.exit(1);
 }
 // If bookmarks JSON file is a relative path, resolve it to an absolute one.
