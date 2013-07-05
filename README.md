@@ -26,3 +26,6 @@ e.g.
 parse-ff-bookmarks /path/to/bookmarks.json my-bookmarks.html "Bookmarks Menu/Web Dev"
 ```
 The above would limit the output to only bookmarks within the Web Dev folder.
+
+## Example
+I've posted my collection of [web dev bookmarks](http://whastings.github.io/dev-reference/web-dev-bookmarks.html), which I generated using this tool.
