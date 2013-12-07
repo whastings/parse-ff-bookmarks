@@ -71,6 +71,8 @@ if (bookmarksJsonFile.charAt(0) != '/') {
       throw new Error('The specified start folder was not found.');
     }
   }
+  // Create nested links for all bookmark folders.
+  createNestedLinks(bookmarks);
   // Read in folder and bookmark templates, as well as CSS and JS.
   return [
     Q.nfcall(fs.readFile, FOLDER_TEMPLATE_FILE),
@@ -127,4 +129,41 @@ function getFolder(folder, contents) {
     return getFolder(folder, foundFolder);
   }
   return foundFolder;
+}
+
+/**
+ * Recursively adds link paths to all folders.
+ *
+ * @param object bookmarks
+ *   Bookmarks object with children.
+ * @param string parentPath
+ *   Path part(s) to prefix new ones with.
+ */
+function createNestedLinks(bookmarks, parentPath) {
+  parentPath = parentPath || '';
+  var children = bookmarks.children;
+  for (var i = 0, length = children.length; i < length; i++) {
+    if (children[i].type == 'text/x-moz-place-container') {
+      var folderId = convertToId(children[i].title);
+      children[i].folderId = folderId;
+      children[i].path = parentPath + '/' + folderId;
+      if (children[i].children && children[i].children.length > 0) {
+        createNestedLinks(children[i], children[i].path);
+      }
+    }
+  }
+}
+
+/**
+ * Normalizes a title to one that's URL compatible.
+ *
+ * @param string name
+ *   The title to normalize.
+ *
+ * @return string
+ *   The normalized title.
+ */
+function convertToId(name) {
+  name = name.toLowerCase();
+  return name.replace(/[^a-z0-9-_]/g, '-');
 }

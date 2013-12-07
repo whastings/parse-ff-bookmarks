@@ -1,5 +1,7 @@
-<div class="folder">
-  <h2 class="folder-title"><a href="#">{{title}}</a></h2>
+<div class="folder" data-folder-id="{{folderId}}">
+  <h2 class="folder-title">
+    <a href="#{{path}}">{{title}}</a>
+  </h2>
   <ul>
   {{#each children}}
     {{renderChild this}}

@@ -6,6 +6,12 @@
   (function() {
     closeAll();
     document.querySelector('body > .folder > ul').style.display = 'block';
+    // Open path to a nested link if there's one.
+    var nestedPath = location.hash;
+    if (nestedPath) {
+      nestedPath = nestedPath.replace(/^#\//, '');
+      openNestedPath(nestedPath);
+    }
   })();
 
   // Open and close folders when their titles are clicked.
@@ -53,6 +59,37 @@
       if (folder.style.display != 'none') {
         folder.style.display = 'none';
       }
+    }
+  }
+
+  function openNestedPath(path, startFolder) {
+    if (typeof path === 'string') {
+      path = path.split('/');
+    }
+    if (!startFolder) {
+      startFolder = document.querySelector('body > .folder > ul');
+    }
+    var pathPart = path[0],
+        children = startFolder.children;
+        foundFolder = false;
+    for (var i = 0, length = children.length; i < length; i++) {
+      var childFolder = children[i].firstChild;
+      if (childFolder && childFolder.getAttribute('data-folder-id') == pathPart) {
+        foundFolder = childFolder.querySelector('ul');
+      }
+    }
+    if (foundFolder) {
+      foundFolder.style.display = 'block';
+      path = path.slice(1);
+      if (path.length > 0) {
+        openNestedPath(path, foundFolder);
+      }
+      else {
+        foundFolder.parentNode.scrollIntoView();
+      }
+    }
+    else {
+      startFolder.parentNode.scrollIntoView();
     }
   }
 
