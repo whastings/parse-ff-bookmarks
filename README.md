@@ -27,5 +27,10 @@ parse-ff-bookmarks /path/to/bookmarks.json my-bookmarks.html "Bookmarks Menu/Web
 ```
 The above would limit the output to only bookmarks within the Web Dev folder.
 
+## Deep Linking
+If you want to share a folder in your bookmarks, even one deeply nested, you can
+simply copy its link. Anyone who visits the link will have the linked folder opened
+and moved into focus.
+
 ## Example
 I've posted my collection of [web dev bookmarks](http://whastings.github.io/dev-reference/web-dev-bookmarks.html), which I generated using this tool.
