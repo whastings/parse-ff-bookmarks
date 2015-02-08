@@ -33,4 +33,4 @@ simply copy its link. Anyone who visits the link will have the linked folder ope
 and moved into focus.
 
 ## Example
-I've posted my collection of [web dev bookmarks](http://whastings.github.io/dev-reference/web-dev-bookmarks.html), which I generated using this tool.
+I've posted my collection of [web dev bookmarks](http://objectdotcreate.net/devnotes/web-dev-bookmarks.html), which I generated using this tool.
